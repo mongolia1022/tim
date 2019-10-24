@@ -24,11 +24,17 @@ const user = {
     }
   },
   actions: {
-    login(context, userID) {
+    login(context, user) {
+        window.console.log(user)
+        if (user.pwd !== '123') {
+            window.$message.error('密码错误')
+            return
+        }
+
       tim
         .login({
-          userID,
-          userSig: window.genTestUserSig(userID).userSig
+          userID:user.userID,
+          userSig: window.genTestUserSig(user.userID).userSig
         })
         .then(() => {
           context.commit('toggleIsLogin', true)

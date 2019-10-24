@@ -1,9 +1,9 @@
 <template>
   <div class="login-wrapper">
     <img :src="logo" width="50" height="50" style="border-radius: 5px;margin-bottom:12px;"/>
-    <el-select v-model="userID">
-      <el-option v-for="index in 30" :key="index" :label="`user${index-1}`" :value="`user${index-1}`"></el-option>
-    </el-select>
+    <el-input placeholder="请输入用户ID" v-model="userID" />
+    <br>
+    <el-input type="password" placeholder="请输入密码" v-model="pwd" />
     <br>
     <el-button type="primary" @click="login" style="width:100%;">登录</el-button>
   </div>
@@ -20,13 +20,14 @@ export default {
   },
   data() {
     return {
-      userID: 'user0',
+      userID: '',
+      pwd:'',
       logo: logo
     }
   },
   methods: {
     login() {
-      this.$store.dispatch('login', this.userID)
+      this.$store.dispatch('login', {userID:this.userID,pwd:this.pwd})
     }
   }
 }

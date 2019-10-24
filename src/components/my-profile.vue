@@ -26,7 +26,7 @@
     </el-dialog>
     <el-popover :width="200" trigger="click" placement="right">
       <profile-card :profile="currentUserProfile" />
-      <el-button type="text" @click="handleEdit">编辑</el-button>
+      <!--<el-button type="text" @click="handleEdit">编辑</el-button>-->
       <avatar shape="square" slot="reference" :src="currentUserProfile.avatar" text="U" class="my-avatar" />
     </el-popover>
   </div>
