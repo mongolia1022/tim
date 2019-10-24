@@ -8,6 +8,8 @@ import TIM from 'tim-js-sdk'
 import './assets/icon/iconfont.css'
 
 import VueMeta from 'vue-meta'
+import axios from 'axios'
+import QS from 'qs'
 Vue.use(VueMeta)
 
 window.tim = tim
@@ -27,6 +29,8 @@ Vue.use(Input)
 Vue.use(Loading)
 Vue.use(Dialog)
 Vue.component('avatar', Avatar)
+Vue.prototype.$axios = axios;
+Vue.prototype.qs = QS
 new Vue({
   render: h => h(Index)
 }).$mount('#app')

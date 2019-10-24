@@ -1,7 +1,6 @@
 <template>
   <div id="tim-demo-wrapper">
-    <login v-if="!isLogin" />
-    <div class="demo" v-else>
+    <div class="demo">
       <el-row
         style="width:100%"
         v-loading="showLoading"
@@ -29,8 +28,8 @@ import { Notification } from 'element-ui'
 import { mapState } from 'vuex'
 import CurrentConversationBox from './components/conversation/current-conversation'
 import SideBar from './components/layout/side-bar'
-import Login from './components/login/login'
-import { translateGroupSystemNotice } from './utils/common'
+import { translateGroupSystemNotice,getUrlParamValue } from './utils/common'
+import http from './utils/http'
 
 export default {
   metaInfo: {
@@ -42,8 +41,7 @@ export default {
     },
   components: {
     CurrentConversationBox,
-    SideBar,
-    Login
+    SideBar
   },
   data() {
     return {
@@ -69,10 +67,39 @@ export default {
   mounted() {
     // 初始化监听器
     this.initListener()
+      this.startConversation()
   },
 
+    customerServer:0,
+
   methods: {
-    
+    startConversation() {
+        const phone=getUrlParamValue('id')
+        http.fetchGet(`/server/getCustomerServer?clientUser=${phone}`).then((r) => {
+            window.console.log(r)
+            this.customerServer=r.data
+            this.login(phone)
+        }).catch(err=>{
+                this.$message.error('获取客服失败'+err)
+            }
+        )
+    },
+      login(user) {
+          this.tim
+              .login({
+                  userID:user,
+                  userSig: window.genTestUserSig(user).userSig
+              })
+              .then(() => {
+                  this.$store.context.commit('toggleIsLogin', true)
+                  this.$store.context.commit('startComputeCurrent')
+              })
+              .catch(imError => {
+                  if (imError.code === 20000) {
+                      window.$message.error(imError.message + ', 请检查是否正确填写了 SDKAPPID')
+                  }
+              })
+      },
     initListener() {
       this.tim.on(this.TIM.EVENT.SDK_READY, this.onReadyStateUpdate, this)
       this.tim.on(this.TIM.EVENT.SDK_NOT_READY, this.onReadyStateUpdate, this)
@@ -89,24 +116,6 @@ export default {
       this.tim.on(this.TIM.EVENT.GROUP_LIST_UPDATED, event => {
         this.$store.commit('updateGroupList', event.data)
       })
-      this.tim.on(this.TIM.EVENT.GROUP_SYSTEM_NOTICE_RECERIVED, event => {
-        const isKickedout = event.data.type === 4
-        const isCurrentConversation =
-          `GROUP${event.data.message.payload.groupProfile.groupID}` === this.currentConversation.conversationID
-        // 在当前会话被踢，需reset当前会话
-        if (isKickedout && isCurrentConversation) {
-          this.$store.commit('resetCurrentConversation')
-        }
-        Notification({
-          title: '新系统通知',
-          message: translateGroupSystemNotice(event.data.message),
-          duration: 3000,
-          onClick: () => {
-            const SystemConversationID = '@TIM#SYSTEM'
-            this.$store.dispatch('checkoutConversation', SystemConversationID)
-          }
-        })
-      })
     },
     onReceiveMessage({ data: messageList }) {
       this.handleAt(messageList)
@@ -117,7 +126,15 @@ export default {
       this.$message.error(error.message)
     },
     onReadyStateUpdate({ name }) {
-      const isSDKReady = name === this.TIM.EVENT.SDK_READY ? true : false
+        for(var i=0;i< this.customerServer.length;i++) {
+            if (i == 0) {
+                this.$store.dispatch('checkoutConversation', 'C2C'+this.customerServer[i].Tel)
+            }else{
+                this.tim.getConversationProfile('C2C'+this.customerServer[i].Tel)
+            }
+        }
+
+        const isSDKReady = name === this.TIM.EVENT.SDK_READY ? true : false
       this.$store.commit('toggleIsSDKReady', isSDKReady)
 
       if (isSDKReady) {

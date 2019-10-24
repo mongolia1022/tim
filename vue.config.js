@@ -11,5 +11,8 @@ module.exports = {
     config.resolve.alias
       .set('@', resolve('src'))
       .set('tim', resolve('src/tim.js'))
-  }
+  },
+    devServer: {
+        disableHostCheck: true
+    }
 }
