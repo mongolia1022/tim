@@ -186,7 +186,7 @@ export default {
   flex-direction: column;
   align-items: center;
   padding: 12px;
-  background-color: #464545;
+  background:url(../../images/nav_bg2.jpg) bottom center no-repeat; background-size: 100% 100%; 
 }
 .bar-content {
   width: 100%;

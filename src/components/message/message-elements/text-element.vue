@@ -36,16 +36,16 @@ export default {
   position: relative;
   max-width: 300px;
   border: 1px solid rgb(235, 235, 235);
-  border-radius: 3px;
+  border-radius: 100px;
   word-break: break-word;
 }
 .text-element {
-  padding: 6px;
+  padding: 6px 10px;
 }
 .element-received {
   background-color: #fff;
 }
 .element-send {
-  background: rgb(5, 185, 240);
+  background-color: #f17c78;
 }
 </style>

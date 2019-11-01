@@ -252,139 +252,148 @@
 </script>
 
 <style>
-  html,body{height:100%;}
-  body {
-    margin: 0;
-    background-color: #232329;
-    color: #fcfcfc;
-    padding: 1em;
-    font-size: 1em;
-  }
-  #tim-demo-wrapper {
-    display: flex;
-    justify-content: center;
-    padding-top: 100px;
-  }
-  .demo {
-    display: flex;
-    min-width: 800px;
-    max-width: 1000px;
-    min-height: 600px;
-    width: 60%;
-    height: 60vh;
-  }
+html,body{height:100%;}
+body {
+  margin: 0;
+  background-color: #232329;
+  color: #fcfcfc;
+  padding: 1em;
+  font-size: 1em;
+}
+#tim-demo-wrapper {
+  display: flex;
+  justify-content: center;
+  padding-top: 100px;
+}
+.demo {
+  display: flex;
+  min-width: 800px;
+  max-width: 1000px;
+  min-height: 600px;
+  width: 60%;
+  height: 60vh;
+}
 
-  /* 文字超出显示省略号 */
-  .text-ellipsis {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+/* 文字超出显示省略号 */
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-  .el-tabs__content {
-    height: 100%;
-  }
-  .el-tabs__active-bar {
-    background-color: #808080;
-  }
-  /* 当前会话的骨架屏 */
-  .current-conversation,
-  .current-conversation-skeleton {
-    height: 100%;
-    background-color: #eee;
-    box-sizing: border-box;
-    display: flex;
-  }
-  /* 当前会话 */
-  .current-conversation {
-    color: #000;
-    width: 100%;
-  }
+.el-tabs__content {
+  height: 100%;
+}
+.el-tabs__active-bar {
+  background-color: #808080;
+}
+/* 当前会话的骨架屏 */
+.current-conversation,
+.current-conversation-skeleton {
+  height: 100%;
+  background-color: #eee;
+  box-sizing: border-box;
+  display: flex;
+}
+/* 当前会话 */
+.current-conversation {
+  color: #000;
+  width: 100%;
+}
 
-  /* 设置滚动条的样式 */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  /* 滚动槽 */
-  ::-webkit-scrollbar-track {
-    border-radius: 10px;
-  }
-  /* 滚动条滑块 */
-  ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.1);
-  }
+/* 设置滚动条的样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+/* 滚动槽 */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.1);
+}
 
 
-  /*样式修改*/
-  body {background-color: #ebeef5;}
-  #tim-demo-wrapper{padding-top:3vw;}
-  .demo{box-shadow:0px 0px 60px #c3dcf4;}
-  .bar-content[data-v-a2f73dfc]{background-color: #f8f8f8;}
-  .current-conversation,.current-conversation-skeleton{background:url(images/logo_gray2.jpg) center center no-repeat #fff; background-size:35%;}
-  .message-wrapper[data-v-73629db1]{margin: 12px 5px;}
-  .element-send[data-v-453b6846]{background: #f17c78;}
-  .element-send[data-v-453b6846] span{color:#fff;}
-  .bar-header[data-v-a2f73dfc]{ background:url(images/nav_bg2.jpg) bottom center no-repeat; background-size: 100% 100%; }
-  .el-badge{margin-bottom:0.8vw;}
-  .avatar{background:#7d211e;}
-  .iconfont[data-v-a2f73dfc]{color:#fff; filter:alpha(opacity=60);-moz-opacity: 0.6;opacity: 0.6;}
-  .iconfont[data-v-a2f73dfc]:hover{color:#fff;}
-  .iconfont[data-v-a2f73dfc].active{filter:alpha(opacity=100);-moz-opacity: 1;opacity: 1;}
-  .current-conversation-item{/*background-color: #f5f6f8;*/background-color: #f1f1f1;}
-  .bar-content[data-v-a2f73dfc]{overflow:hidden; box-shadow:5px 0px 10px #e6ebef;}
-  .userlist[data-v-577d9dbe]{position:relative;}
-  .userlist[data-v-577d9dbe]:after{content:''; width:80%; height:1px; line-height:1px; font-size:1px; overflow:hidden; border-bottom:1px solid #f2f2f2; position:absolute; bottom:0; right:0;}
-  #group-list{display:none;}
-  #black-list{display:none;}
-  .icon-custom{display:none;}
-  .icon-dice{display:none;}
-  .show-more{display:none;}
-  .more{display:none;}
-  .create-conversation{display:none;}
-  .refresh{display: none;}
-  #friend-list{display: none;}
-  .el-popover-3378{width:300px;}
-  .emojis{width:395px;}
-  picker {display: inline-block}
-  .header{position: relative;}
-  .header .el-icon-back{position: relative; font-size: 1.2rem; position:absolute; left: 2vw; top: 50%; margin-top: -0.6rem; color: #888}
-  .el-button--primary{background: #a02925; border:1px solid #a02925;}
-  .el-button--primary:hover{background: #a02925; border:1px solid #a02925;}
-  .text-element-wrapper[data-v-453b6846]{border-radius: 100px;}
-  .text-element[data-v-453b6846]{padding: 6px 10px;}
+/*样式修改*/
+body {background-color: #ebeef5; overflow: hidden;}
+#tim-demo-wrapper{padding-top:3vw;}
+.demo{box-shadow:0px 0px 60px #c3dcf4;}
+.bar-content{background-color: #f8f8f8;}
+.bar-content{overflow:hidden; box-shadow:5px 0px 10px #e6ebef;}
+.current-conversation,.current-conversation-skeleton{background:url(images/logo_gray2.jpg) center center no-repeat #fff; background-size:35%;}
+.message-wrapper{padding: 0 5px;}
+/*.element-send{background-color: #f17c78;}*/
+.element-send span{color:#fff;}
+/*.bar-header{ background:url(images/nav_bg2.jpg) bottom center no-repeat; background-size: 100% 100%; }*/
+.el-badge{margin-bottom:0.8vw;}
+.avatar{background:#7d211e;}
+/*
+.iconfont[data-v-a2f73dfc]{color:#fff; filter:alpha(opacity=60);-moz-opacity: 0.6;opacity: 0.6;}
+.iconfont[data-v-a2f73dfc]:hover{color:#fff;}
+.iconfont[data-v-a2f73dfc].active{filter:alpha(opacity=100);-moz-opacity: 1;opacity: 1;}
+*/
+.current-conversation-item{/*background-color: #f5f6f8;*/background-color: #f1f1f1;}
+.userlist{position:relative;}
+.userlist::after{content:''; width:80%; height:1px; line-height:1px; font-size:1px; overflow:hidden; border-bottom:1px solid #f2f2f2; position:absolute; bottom:0; right:0;}
+#group-list{display:none;}
+#black-list{display:none;}
+.icon-custom{display:none;}
+.icon-dice{display:none;}
+.show-more{display:none;}
+.more{display:none;}
+.create-conversation{display:none;}
+.refresh{display: none;}
+#friend-list{display: none;}
+.el-popover-3378{width:300px;}
+.emojis{width:395px;}
+picker {display: inline-block}
+.header{position: relative;}
+.header .el-icon-back{position: relative; font-size: 1.2rem; position:absolute; left: 2vw; top: 50%; margin-top: -0.6rem; color: #888; display: none;}
+.el-button--primary{background: #a02925; border:1px solid #a02925;}
+.el-button--primary:hover{background: #a02925; border:1px solid #a02925;}
+/*
+.text-element-wrapper{border-radius: 100px;}
+.text-element[data-v-453b6846]{padding: 6px 10px;}
+*/
 
-  /*去点击阴影*/
-  *{ -webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-tap-highlight-color: transparent; /* For some Androids */ }
+/*去点击阴影*/
+*{ -webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-tap-highlight-color: transparent; /* For some Androids */ }
 
-  /*手机端*/
-  @media screen and (max-width: 1200px) {
+/*手机端*/
+@media screen and (max-width: 1200px) {
     body,html{height:100%; overflow:hidden;}
     body {
-      background-color:lightblue;
-      padding:0;
-      height:100%;
-      overflow:hidden;
+        background-color:lightblue;
+        padding:0;
+        height:100%;
+        overflow:hidden;
     }
+    /*
     .header{width:100vw; overflow-y: scroll;}
-    .header[data-v-72bead03]{background: #a02925; color: #fff; border-bottom: 1px solid #a02925;}
+    .header{background: #a02925; color: #fff; border-bottom: 1px solid #a02925;}
     .header .el-icon-back{color: #fff;}
+    */
     #tim-demo-wrapper{width:100vw; height:100%; padding-top:0; }
     .left{width:100vw; position:fixed; top:0; left:0; z-index:2002;}
     .el-badge{margin-bottom:3vw;}
     .demo{min-width: 100vw; max-width: 100vw;  min-height: 100vh;  max-height: 100vh;}
     .bar-header{padding:3vw;}
     .right{width:100vw; height:100%; overflow:hidden; position:fixed; top:0; left:0; z-index:2001;}
+    /*
     .message-list{padding-left:0;}
     .message-list[data-v-72bead03]{width:100vw; padding:0;}
+    */
     #message-send-box-wrapper{width:100vw;}
     .btn-send{bottom:5vw; right:5vw;}
     .emojis{width:88vw;}
     /*.header{background: #0077ff; color: #fff;}*/
     .avatar {width: 40px; height: 40px; line-height: 40px;}
     .from{padding-left: 2vw;}
-  }
+}
 
 </style>
+
 

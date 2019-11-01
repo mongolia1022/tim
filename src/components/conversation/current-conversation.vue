@@ -160,6 +160,7 @@ export default {
   justify-content: center;
   border-bottom: 1px solid #dddddd;
   height: 40px;
+  
 }
 .content {
   display: flex;
@@ -208,5 +209,13 @@ export default {
   border: #ccc 1px solid;
   background-color: #fff;
   color: #268bf5;
+}
+
+@media screen and (max-width: 1200px) {
+  .header{width:100vw; overflow-y: scroll;}
+  .header{background: #a02925; color: #fff; border-bottom: 1px solid #a02925;}
+  .header .el-icon-back{color: #fff; display: block;}
+  .message-list{padding-left:0;}
+  .message-list{width:100vw; padding:0;}
 }
 </style>
