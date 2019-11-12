@@ -3,7 +3,8 @@ const user = {
   state: {
     currentUserProfile: {},
     isLogin: false,
-    isSDKReady: false // TIM SDK 是否 ready
+    isSDKReady: false, // TIM SDK 是否 ready
+      currentPhone:''
   },
   mutations: {
     updateCurrentUserProfile(state, userProfile) {
@@ -15,6 +16,9 @@ const user = {
     toggleIsSDKReady(state, isSDKReady) {
       state.isSDKReady = typeof isSDKReady === 'undefined' ? !state.isSDKReady : isSDKReady
     },
+      updateCurrentPhone(state, currentPhone) {
+          state.currentPhone = currentPhone
+      },
     reset(state) {
       Object.assign(state, {
         currentUserProfile: {},
@@ -25,7 +29,6 @@ const user = {
   },
   actions: {
     login(context, user) {
-        window.console.log(user)
         if (user.pwd !== '123') {
             window.$message.error('密码错误')
             return
@@ -37,6 +40,8 @@ const user = {
           userSig: window.genTestUserSig(user.userID).userSig
         })
         .then(() => {
+            window.console.log(user)
+            context.commit('updateCurrentPhone',user.userID)
           context.commit('toggleIsLogin', true)
           context.commit('startComputeCurrent')
         })

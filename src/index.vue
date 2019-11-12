@@ -49,7 +49,10 @@
         },
         data() {
             return {
-                activeName: 'conversation'
+                activeName: 'conversation',
+                toUserList:[],
+                userData:{},
+                isServer:getUrlParamValue('isServer')==='1'
             }
         },
 
@@ -62,12 +65,10 @@
                 currentConversation: state => state.conversation.currentConversation,
                 isLogin: state => state.user.isLogin,
                 isSDKReady: state => state.user.isSDKReady,
+                currentPhone: state=> state.user.currentPhone
             }),
             showLoading() {
                 return !this.isSDKReady
-            },
-            isServer() {
-                return getUrlParamValue('isServer')==='1'
             }
         },
 
@@ -82,19 +83,21 @@
             //客服从登录界面登陆后才开始流程 see:/src/components/login/login.vue
         },
 
-        toUserList:0,
-        isServer: getUrlParamValue('server')==='1',
 
         methods: {
             //开始客户会话
             startCustomerConversation() {
-                const phone=getUrlParamValue('phone')
+                this.$store.commit('updateCurrentPhone', getUrlParamValue('phone'))
                 //先找客服
-                http.fetchGet(`/server/getServer?phone=${phone}`).then((r) => {
-                    this.toUserList=r.data
+                http.fetchGet(`/server/getServer?phone=${this.currentPhone}`).then((r) => {
+                    this.toUserList=r.data.map((d) => {
+                        return {
+                            PhoneNum:d.Tel,
+                            Name:d.MarketingAidsName}
+                    })
                     if (this.toUserList.length>0) {
                         //找到才登录
-                        this.login(phone)
+                        this.login(this.currentPhone)
                     }else{
                         this.$message.error('没有找到客服')
                     }
@@ -103,18 +106,23 @@
                     }
                 )
             },
-            //开始客服会话
-            startServerConversation(data) {
-                const phone=data.userID
-                window.console.log(phone)
-                http.fetchGet(`/server/getCustomer?phone=${phone}`).then((r) => {
+
+            //初始化左边会话列表
+            fillConversation(data) {
+                if (this.toUserList.length>0) {
+                    this.fillUserList(data)
+                    return
+                }
+
+                http.fetchGet(`/server/getCustomer?phone=${this.currentPhone}`).then((r) => {
                     this.toUserList=r.data
-                    this.fillUserList()
+                    this.fillUserList(data)
                 }).catch(err=>{
                         this.$message.error('获取客户失败'+err)
                     }
                 )
             },
+
             //登录
             login(user) {
                 this.tim
@@ -133,14 +141,51 @@
                     })
             },
 
-            fillUserList() {
-                for(var i=0;i< this.toUserList.length;i++) {
-                    if (i == 0) {
-                        this.$store.dispatch('checkoutConversation', 'C2C'+this.toUserList[i].Tel)
-                    }else{
-                        this.tim.getConversationProfile('C2C'+this.toUserList[i].Tel)
+            fillUserList(data) {
+                window.console.log('呃呃呃呃呃')
+                window.console.log(data)
+
+                var resultArr=[]
+                var resultMap=new Map()
+                data.map(d => {
+                    resultArr.push(d)
+                    resultMap.set(d.userProfile.userID,d)
+                })
+
+                this.toUserList.map(user => {
+                    var d = resultMap.get(user.PhoneNum)
+                    if (d) {
+                        return
                     }
-                }
+
+                    var cItem = {
+                        type:'C2C',
+                            userProfile: {
+                                nick: user.Name,
+                                userID: user.PhoneNum
+                            }
+                    }
+
+                    resultArr.push(cItem)
+                    resultMap.set(cItem.userProfile.userID,cItem)
+                })
+
+                window.console.log(resultArr)
+                this.$store.commit('updateConversationList', resultArr)
+            },
+
+            updateUser(toUserList,callbak) {
+                const params=toUserList.map(u=> {
+                    return {Identifier:u.PhoneNum,Nick:u.Name}
+                })
+
+                window.console.log(params)
+                http.fetchPost('/server/user/import',params).then((r) => {
+                    callbak()
+                }).catch(err=>{
+                        this.$message.error('导入客户失败'+err)
+                    }
+                )
             },
 
             initListener() {
@@ -154,7 +199,8 @@
                 this.tim.on(this.TIM.EVENT.ERROR, this.onError)
                 this.tim.on(this.TIM.EVENT.MESSAGE_RECEIVED, this.onReceiveMessage)
                 this.tim.on(this.TIM.EVENT.CONVERSATION_LIST_UPDATED, event => {
-                    this.$store.commit('updateConversationList', event.data)
+                    window.console.log('更新会话更新会话更新会话更新会话更新会话')
+                    this.fillConversation(event.data)
                 })
                 this.tim.on(this.TIM.EVENT.GROUP_LIST_UPDATED, event => {
                     this.$store.commit('updateGroupList', event.data)
@@ -175,12 +221,7 @@
                 if (isSDKReady) {
                     this.tim.getMyProfile().then(({ data }) => {
                         this.$store.commit('updateCurrentUserProfile', data)
-                        if (this.isServer) {
-                            this.startServerConversation(data)
-                        }else{
-                            //客户态，填充左侧客服列表
-                            this.fillUserList()
-                        }
+                        this.userData=data
                     })
                     this.$store.dispatch('getBlacklist')
                 }

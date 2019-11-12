@@ -27,7 +27,7 @@
     <el-popover :width="200" trigger="click" placement="right">
       <profile-card :profile="currentUserProfile" />
       <!--<el-button type="text" @click="handleEdit">编辑</el-button>-->
-      <avatar shape="square" slot="reference" :src="currentUserProfile.avatar" text="U" class="my-avatar" />
+      <avatar shape="square" slot="reference" :src="currentUserProfile.avatar||'https://c-ssl.duitang.com/uploads/item/201704/27/20170427155254_Kctx8.thumb.700_0.jpeg'" text="U" class="my-avatar" />
     </el-popover>
   </div>
 </template>

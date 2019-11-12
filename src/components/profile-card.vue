@@ -1,7 +1,7 @@
 <template>
   <div class="profile-card-wrapper">
     <div class="profile-header">
-      <avatar :src="profile.avatar" shape="square" text="U" />
+      <avatar :src="profile.avatar||'https://c-ssl.duitang.com/uploads/item/201704/27/20170427155254_Kctx8.thumb.700_0.jpeg'" shape="square" text="U" />
       <div class="basic">
         <span class="nick text-ellipsis">{{ profile.nick || profile.userID }}</span>
         <span class="iconfont" :class="genderClass"></span>

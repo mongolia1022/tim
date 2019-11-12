@@ -62,7 +62,7 @@ export default {
     ...mapGetters(['toAccount']),
     name() {
       if (this.currentConversation.type === 'C2C') {
-        return this.currentConversation.userProfile.nick || this.toAccount
+        return this.currentConversation.userProfile.nick+'('+this.currentConversation.userProfile.userID+')' || this.toAccount
       } else if (this.currentConversation.type === 'GROUP') {
         return this.currentConversation.groupProfile.name || this.toAccount
       }

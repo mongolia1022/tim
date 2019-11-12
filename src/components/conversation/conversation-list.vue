@@ -11,7 +11,7 @@
       :conversation="item"
       v-for="item in conversationList"
       :key="item.conversationID"
-      :class="{'current-conversation-item': item.conversationID === currentConversation.conversationID}"
+      :class="{'current-conversation-item': item.conversationID&&item.conversationID === currentConversation.conversationID}"
     />
     <el-button
       class="bottom-circle-btn create-conversation"

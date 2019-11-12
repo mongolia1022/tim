@@ -11,7 +11,7 @@
     <div
       slot="reference"
       class="conversation-item-container"
-      @contextmenu.prevent="popoverVisible = true"
+      @contextmenu.prevent="popoverVisible = false"
       @click="selectConversation"
       ref="conersation_list"
       v-on:click="ChageStyle()"
@@ -26,7 +26,7 @@
               <div
                 class="covnersation-info text-ellipsis"
                 v-if="typeof conversation.userProfile !== 'undefined'"
-              >{{conversation.userProfile.nick || conversation.userProfile.userID}}</div>
+              >{{conversation.userProfile.nick+'('+conversation.userProfile.userID+')'}}</div>
               <div
                 class="covnersation-info text-ellipsis"
                 v-else-if="typeof conversation.groupProfile !== 'undefined'"
@@ -90,14 +90,15 @@ export default {
       return getDate(date)
     },
     avatar: function() {
-      switch (this.conversation.type) {
+            return this.conversation.userProfile.avatar||'https://c-ssl.duitang.com/uploads/item/201704/27/20170427155254_Kctx8.thumb.700_0.jpeg'
+      /*switch (this.conversation.type) {
         case 'GROUP':
           return this.conversation.groupProfile.avatar
         case 'C2C':
           return this.conversation.userProfile.avatar
         default:
-          return ''
-      }
+          return 'https://c-ssl.duitang.com/uploads/item/201704/27/20170427155254_Kctx8.thumb.700_0.jpeg'
+      }*/
     },
     showGrayBadge() {
       if (this.conversation.type !== this.TIM.TYPES.CONV_GROUP) {
@@ -129,6 +130,18 @@ export default {
       document.querySelector('.left').style.zIndex='2001'
     },
     selectConversation() {
+        if (!this.conversation.conversationID) {
+            this.tim.getConversationProfile('C2C'+this.conversation.userProfile.userID).then(({ data }) => {
+                this.$store.dispatch(
+                    'checkoutConversation',
+                    data.conversation.conversationID
+                )
+            }).catch(e=>{
+                window.console.log(e)
+            })
+            return
+        }
+
       this.$store.dispatch(
         'checkoutConversation',
         this.conversation.conversationID
