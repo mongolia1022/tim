@@ -399,13 +399,18 @@ picker {display: inline-block}
 .text-element-wrapper{border-radius: 100px;}
 .text-element[data-v-453b6846]{padding: 6px 10px;}
 */
+button.vioce_btn{position: absolute; top: 5%; left: 118px; height: 7vw; z-index: 99999; background: #a02925; color: gray; background: #fff; border: 1px solid #999; font-size: 2rem; text-decoration: none; border-radius: 60px; font-size: 12px; text-align: center; line-height: 7vw; width: 100px; padding: 0; display: none;}
+.el-button:hover{background: #fff; border: 1px solid #999; color: gray;}
+.el-button:active{background: #fff; border: 1px solid #999; color: gray;}
+
 
 /*去点击阴影*/
 *{ -webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-tap-highlight-color: transparent; /* For some Androids */ }
 
 /*手机端*/
 @media screen and (max-width: 1200px) {
-    body,html{height:100%; overflow:hidden;}
+  button.vioce_btn{display: block;}
+  body,html{height:100%; overflow:hidden;}
     body {
         background-color:lightblue;
         padding:0;

@@ -1,5 +1,6 @@
 <template>
   <div id="message-send-box-wrapper">
+    <button class="vioce_btn el-button btn-send el-button--default el-button--small" v-on:click="record"><span>{{!audioStart?'按住发语音':'正在录音'}}</span></button>
     <div class="send-header-bar">
       <el-popover placement="top" width="400" trigger="click">
         <div class="emojis">
@@ -71,6 +72,9 @@
 import { mapGetters, mapState } from 'vuex'
 import { Form, FormItem, Input, Dialog, Popover, RadioGroup, Radio } from 'element-ui'
 import { emojiMap, emojiName, emojiUrl } from '../../utils/emojiMap'
+import Recorder from 'js-audio-recorder'
+import http from '../../utils/http'
+
 export default {
   name: 'message-send-box',
   props: ['scrollMessageListToButtom'],
@@ -98,7 +102,9 @@ export default {
       emojiName: emojiName,
       emojiUrl: emojiUrl,
       showAtGroupMember: false,
-      atUserID: ''
+      atUserID: '',
+        audioStart:false,
+        recorder:null
     }
   },
 
@@ -244,6 +250,34 @@ export default {
       this.$store.commit('pushCurrentMessageList', message)
       this.tim.sendMessage(message).catch(imError => this.$message.error(imError.message))
       this.$refs.filePicker.value = null
+    },
+    record() {
+        //开始录音
+        if (!this.audioStart) {
+            this.audioStart=true
+            this.recorder = new Recorder()
+            this.recorder.start()
+        }else{
+            this.audioStart=false
+            let param = new window.FormData()
+            param.append('audio', this.recorder.getWAVBlob())
+
+            http.fetchPost('/server/uploadAudio',param).then((r) => {
+                const message = this.tim.createTextMessage({
+                    to: this.toAccount,
+                    conversationType: this.currentConversationType,
+                    payload: { text: r.data }
+                })
+                this.$store.commit('pushCurrentMessageList', message)
+                this.$bus.$emit('scroll-bottom')
+                this.tim.sendMessage(message)
+                this.messageContent = ''
+
+            }).catch(err=>{
+                    this.$message.error('语音上传失败'+err)
+                }
+            )
+        }
     }
   }
 }
@@ -292,4 +326,6 @@ export default {
   background-color: transparent;
   border: none;
 }
+
+
 </style>
