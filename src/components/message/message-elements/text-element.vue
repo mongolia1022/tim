@@ -2,7 +2,7 @@
   <div class="text-element-wrapper" :class="isMine ? 'element-send' : 'element-received'">
     <div class="text-element">
       <template v-for="(item, index) in contentList">
-        <span @click="playAudio" :key="index"  v-if="item.name === 'text'&&item.text.indexOf('.wav') !== -1"><audio :src="item.text"></audio>语音消息</span>
+        <audio :key="index"  v-if="item.name === 'text'&&item.text.indexOf('.wav') !== -1" :src="item.text" controls="controls"></audio>
         <span :key="index" v-else-if="item.name === 'text'">{{ item.text }}</span>
         <img v-else-if="item.name === 'img'" :src="item.src" width="20px" height="20px" :key="index" />
       </template>
